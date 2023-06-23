@@ -1,0 +1,4 @@
+name,url
+numerical_imputer,../data/04_model/encoders/numerical_imputer_encoder.joblib
+categorical_imputer,../data/04_model/encoders/categorical_imputer_encoder.joblib
+clean_column_names,../data/04_model/encoders/clean_column_names_encoder.joblib

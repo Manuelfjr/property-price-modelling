@@ -40,8 +40,11 @@ def metrics_calculate(args: list) -> dict:
     return metrics
 
 def show_results(metrics: dict,
-                 which: str) -> None:
+                 which: str) -> dict:
+    metrics_results = {}
     for me in [[which,metrics]]:
         print(f'-------- [ {me[0]} ] ----------')
         for metric, result in me[1].items():
             print(f"{metric} : {round(result, 4)}")
+        metrics_results[me[0]] = me[1]
+    return metrics_results

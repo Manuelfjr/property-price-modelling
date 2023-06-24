@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from pandas import DataFrame
+import numpy as np
 
 def scatterplot_yx(args_train: list,
                    args_preds: list,
@@ -55,4 +56,97 @@ def plot_outliers_histogram(data_input: DataFrame,
     axes[0].set_ylabel(target)
     axes[0].legend()
 
+    return fig
+
+
+def plot_feature_importance(
+        feature_importance: DataFrame,
+        top_k: int = 10
+        ) -> Figure:
+    
+    fig, axes = plt.subplots(1, 1, figsize=(12, 8))
+    axes.plot(range(len(feature_importance.head(top_k).fe)),
+              feature_importance.head(top_k).fe,
+              "*", 
+              c="black")
+
+    for (i, row), x in zip(feature_importance.head(top_k).iterrows(),
+                           range(len(feature_importance.head(top_k).fe))):
+        axes.annotate(row['features'], 
+                      xy=(x, row['fe']), ha='center', va='bottom')
+        axes.grid()
+    return fig
+
+def plot_predictions(
+        data_values: dict,
+        metrics_results: dict,
+        target: list,
+        figsize: tuple
+        ) -> Figure:
+    fig, axes = plt.subplots(1, 2, figsize = figsize)
+
+    for ax, (name, content), metric_content in zip(axes, data_values.items(), metrics_results.values()):
+        ax.plot(content["y_true"], content["y_true"], 'r', linewidth=2, linestyle='dashed')
+        ax.plot(content["y_true"], content["y_pred"], '*', label="Predicted")
+        ax.grid(True)
+        ax.set_title(f"{name.title()} | R² = {metric_content['r2']:.5f}")
+        ax.set_xlabel(f"True {target[0]}")
+        ax.set_ylabel(f"Predicted {target[0]}")
+        ax.legend()
+        
+    plt.tight_layout()
+
+    return fig
+
+def plot_true_vs_pred(
+    data_values: dict,
+    color_n1: str,
+    color_n2: str,
+    figsize: tuple,
+    **kwargs
+) -> Figure:
+    print(len(data_values.items()))
+    fig, axes = plt.subplots(1,
+                            len(data_values.items()),
+                            figsize = figsize)
+    print(len(data_values.items()))
+    if len(data_values.items()) == 1:
+        axes = [axes]
+    for (name, content), ax in zip(data_values.items(), axes):
+        ax.plot(content['y_true'].values,
+                label="true",
+                color=color_n1,
+                **kwargs)
+        ax.plot(content['y_pred'].values,
+                label="pred",
+                color=color_n2,
+                **kwargs)
+        ax.set_title(f"{name.title()} | ρ = {np.corrcoef(content['y_true'].values, content['y_pred'].values)[0, 1]:.5f}")
+        ax.grid(True)
+    
+    plt.legend()
+    
+    return fig
+
+
+def plot_true_vs_pred_multiple(
+        data_values: dict,
+        metrics_results: dict,
+        target: list,
+        figsize: tuple=(20, 8),
+        **kwargs) -> Figure:
+    
+    fig, axes = plt.subplots(1, len(data_values.keys()), figsize=figsize)
+    if len(data_values.keys()) == 1:
+        axes = [axes]
+    
+    for (idx, (name, content)), metric_content in zip(enumerate(data_values.items()), metrics_results.values()):
+        ax = axes[idx]
+        ax.plot(content["y_true"], content["y_true"], 'r',**kwargs)# linewidth=2, linestyle='dashed')
+        ax.plot(content["y_true"], content["y_pred"], '*',**kwargs)
+        ax.set_title(name.title() + r" | $R^{2}$ = " + "{:.5}".format(metric_content["r2"]))
+        ax.set_xlabel(f"True {target[0]}")
+        ax.set_ylabel(f"Predict {target[0]}")
+        ax.grid()
+    
     return fig

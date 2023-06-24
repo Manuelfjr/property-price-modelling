@@ -6,7 +6,7 @@ def ranking_output(
         ) -> DataFrame:
     data_rank = DataFrame(args, 
                             index = ["y_true", "y_pred"]).T
-    data_preds = data_rank.sort_values("y_true", ascending = False)
+    data_rank = data_rank.sort_values("y_true", ascending = False)
     data_rank["rank_true"] = (
         data_rank
         .sort_values("y_true", ascending = False)

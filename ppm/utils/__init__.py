@@ -1,6 +1,11 @@
-from . import external_get_data, readers
+from . import (
+    external_get_data,
+    readers,
+    feature_process
+    )
 
 __all__ = [
     "external_get_data",
-    "readers"
+    "readers",
+    "feature_process"
 ]

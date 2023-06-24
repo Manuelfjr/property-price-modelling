@@ -1,10 +1,10 @@
 import matplotlib.pyplot as plt
-from matplotlib.figure import Figure
 import shap
 import pandas as pd
 
 def shap_explainer(model: list,
-                   X: pd.DataFrame) -> Figure:
+                   X: pd.DataFrame) -> tuple:
+    fig = plt.figure()
     explainer = shap.Explainer(model[0])
     shap_values = explainer.shap_values(X)
     shap.summary_plot(shap_values,
@@ -12,6 +12,8 @@ def shap_explainer(model: list,
                     plot_type="violin",
                     color_bar=False, show=False)
     plt.colorbar(label='SHAP Value')
+    return fig, explainer
+
 
 def tree_explainer(model: list,
                    features_names: list,

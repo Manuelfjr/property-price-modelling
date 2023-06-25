@@ -29,7 +29,7 @@ def find_regex_cep(text: str) -> str:
     else:
         return None
     
-def search_cep(endereco):
+def search_cep(endereco: str) -> tuple:
     geolocator = Nominatim(
         user_agent = "my_geocoder"
     )

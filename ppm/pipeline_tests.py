@@ -42,9 +42,12 @@ file_path_metrics_features_test = os.path.join(
 file_path_metrics_features_selected = os.path.join(
     path_primary, "features_selected.json"
 )
+file_path_not_outliers = os.path.join(
+    path_primary, "data_not_outliers.csv"
+)
 
 data_input = pd.read_csv(
-    file_path_input_data,
+    file_path_not_outliers, # file_path_input_data,
     index_col = 0
 )
 

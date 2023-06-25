@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
 import shap
-import pandas as pd
+from pandas.core.frame import DataFrame
 
 def shap_explainer(model: list,
-                   X: pd.DataFrame) -> tuple:
+                   X: DataFrame) -> tuple:
     fig = plt.figure()
     explainer = shap.Explainer(model[0])
     shap_values = explainer.shap_values(X)
@@ -20,7 +20,7 @@ def tree_explainer(model: list,
                     n_features: int) -> list:
     if hasattr(model[0], "feature_importances_"):
         fe_values = model[0].feature_importances_
-    features_importance = pd.DataFrame(
+    features_importance = DataFrame(
         fe_values,
         index = features_names,
         columns = ["fe"]

@@ -10,7 +10,7 @@ __pycache__/
 *.lock
 oos/*
 *oos*
-
+*[A-Z][A-Z]_*
 
 # Distribution / packaging
 .Python

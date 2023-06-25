@@ -105,11 +105,10 @@ def plot_true_vs_pred(
     figsize: tuple,
     **kwargs
 ) -> Figure:
-    print(len(data_values.items()))
     fig, axes = plt.subplots(1,
                             len(data_values.items()),
                             figsize = figsize)
-    print(len(data_values.items()))
+    
     if len(data_values.items()) == 1:
         axes = [axes]
     for (name, content), ax in zip(data_values.items(), axes):

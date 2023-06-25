@@ -80,6 +80,7 @@ def get_connection(url: str,
 
 def scrapping_zipimoveis(url: str) -> dict:
     root_xpath = "//div[@class='card-container js-listing-card']"
+    i_xpath_highlight = root_xpath + "//div[@class='simple-card__highligths']"
     i_xpath_price = root_xpath + "//div[@class='simple-card__listing-prices simple-card__prices']"
     i_xpath_amenities = root_xpath + "//ul[@class='feature__container simple-card__amenities']"
     i_xpath_feature = ".//li[contains(@class, 'feature__item')]"
@@ -93,11 +94,23 @@ def scrapping_zipimoveis(url: str) -> dict:
         content_data = {}
         for idx, i in enumerate(list_local):
             ID = f'id-{i.get_attribute("data-id")}'
-            #print('-- getting: [{}]'.format(ID))
             content_data[ID] = {}
+            
+            #print('-- getting: [{}]'.format(ID))
             price = i.find_elements(By.XPATH,
                                     i_xpath_price)
             price_extracted = price[idx].find_element(By.TAG_NAME, "strong").text
+        
+            
+            highlight = i.find_elements(By.XPATH,
+                                        i_xpath_highlight)
+            try:
+                highlight_extracted = highlight[idx].find_element(By.TAG_NAME, "strong").text
+            except:
+                highlight_extracted = np.nan
+            content_data[ID]['highlight'] = [
+                highlight_extracted
+            ]
             #print('---- price: [{}]'.format(price_extracted))
             content_data[ID]['price'] = [
                 price_extracted

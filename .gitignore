@@ -10,6 +10,7 @@ __pycache__/
 *.lock
 oos/*
 *oos*
+oos/03_primary/*
 data/02_intermediate/categorical_dict/*
 */data_not_outliers*
 data/03_primary/data_processed_concat.csv

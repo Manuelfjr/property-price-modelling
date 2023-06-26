@@ -83,7 +83,10 @@ def plot_predictions(
         target: list,
         figsize: tuple
         ) -> Figure:
-    fig, axes = plt.subplots(1, 2, figsize = figsize)
+    fig, axes = plt.subplots(1, len(data_values.items()), figsize = figsize)
+
+    if len(data_values.items()) == 1:
+        axes = [axes]
 
     for ax, (name, content), metric_content in zip(axes, data_values.items(), metrics_results.values()):
         ax.plot(content["y_true"], content["y_true"], 'r', linewidth=2, linestyle='dashed')
@@ -138,7 +141,7 @@ def plot_true_vs_pred_multiple(
     fig, axes = plt.subplots(1, len(data_values.keys()), figsize=figsize)
     if len(data_values.keys()) == 1:
         axes = [axes]
-    
+
     for (idx, (name, content)), metric_content in zip(enumerate(data_values.items()), metrics_results.values()):
         ax = axes[idx]
         ax.plot(content["y_true"], content["y_true"], 'r',**kwargs)# linewidth=2, linestyle='dashed')
@@ -146,6 +149,6 @@ def plot_true_vs_pred_multiple(
         ax.set_title(name.title() + r" | $R^{2}$ = " + "{:.5}".format(metric_content["r2"]))
         ax.set_xlabel(f"True {target[0]}")
         ax.set_ylabel(f"Predict {target[0]}")
-        ax.grid()
+        ax.grid(True)
     
     return fig

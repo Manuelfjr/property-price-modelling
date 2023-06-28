@@ -1,5 +1,42 @@
 from pandas import DataFrame, concat
 from tqdm import tqdm
+
+import numpy as np
+import pgeocode
+from pandas import DataFrame
+from geopy.geocoders import Nominatim
+
+def find_lat_long(
+    data: DataFrame,
+    feature: str="local",
+    uf: str="pb",
+    country: str="brasil"
+) -> tuple:
+    lats = []
+    longs = []
+    cbg = []
+    nomi = pgeocode.Nominatim('br')
+    for local in  tqdm(data[feature]):
+        if local!=None:
+            address = local + f', {uf.upper()}, {country.title()}'
+            try:
+
+                geolocator = Nominatim(user_agent="geolocalização")
+                location = geolocator.geocode(address)
+                
+                lats.append(float(location.latitude))
+                longs.append(float(location.longitude))
+
+            except:
+                lats.append(np.nan)
+                longs.append(np.nan)
+
+        else:
+            lats.append(np.nan)
+            longs.append(np.nan)
+    
+    return lats, longs
+
 def replace_names(value: str) -> str:
     value = value.replace('parking ','')
     value = value.replace('bedroom ','')
@@ -27,12 +64,12 @@ def convert_to_float(x: str) -> float:
 def replace_na_with_mean(
         data_merged: DataFrame,
         columns_na: list,
-        bairro: str) -> tuple:
+        bairro_name: str) -> tuple:
     data_bairros = {}
     errors = []
     
-    for bairro in tqdm(data_merged.bairro.unique()):
-        data_bairros[bairro] = data_merged[data_merged.bairro.str.contains(bairro)].reset_index(drop=True)
+    for bairro in tqdm(data_merged[bairro_name].unique()):
+        data_bairros[bairro] = data_merged[data_merged[bairro_name].str.contains(bairro)].reset_index(drop=True)
         
         for na_col in tqdm(columns_na):
             try:

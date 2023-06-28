@@ -74,7 +74,7 @@ def plot_feature_importance(
                            range(len(feature_importance.head(top_k).fe))):
         axes.annotate(row['features'], 
                       xy=(x, row['fe']), ha='center', va='bottom')
-        axes.grid()
+        axes.grid(True)
     return fig
 
 def plot_predictions(
